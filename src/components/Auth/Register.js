@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { baseurl } from '../../config';
@@ -8,6 +8,9 @@ import classes from './Login.module.css';
 import { authActions } from '../store/auth-slice';
 
 const Register = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const dispatch = useDispatch();
   const history = useHistory();
   const nameRef = useRef();
@@ -22,6 +25,8 @@ const Register = () => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     const sendData = async () => {
+      setIsLoading(true);
+      setError('');
       try {
         const res = await axios.post(`${baseurl}/auth/register`, {
           name,
@@ -38,15 +43,26 @@ const Register = () => {
         dispatch(authActions.login(user));
         history.replace('/profile');
       } catch (err) {
+        setIsLoading(false);
+        setError(err.response.data);
         console.log(err.response);
       }
     };
     sendData();
   };
 
+  let alert;
+  if (isLoading) {
+    alert = <p className={classes.alert}>Loading...</p>;
+  }
+  if (error) {
+    alert = <p className={classes.error}>{error}</p>;
+  }
+
   return (
     <section className={classes.auth}>
       <h1> Register</h1>
+      {alert}
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor="username">Your Username</label>

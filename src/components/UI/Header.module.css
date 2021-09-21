@@ -11,10 +11,7 @@
   width: 200px;
 }
 
-.header nav {
-  height: 100%;
-}
-
+.header nav,
 .header ul {
   height: 100%;
   list-style: none;
@@ -39,4 +36,19 @@
   color: #fff;
   padding-bottom: 0.25rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.header button {
+  cursor: pointer;
+  font: inherit;
+  color: white;
+  background-color: #484b4f;
+  border: 1px solid #484b4f;
+  border-radius: 4px;
+  padding: 0.25rem 1.5rem;
+}
+
+.header button:hover {
+  background-color: #8d9197;
+  border-color: #8d9197;
 }

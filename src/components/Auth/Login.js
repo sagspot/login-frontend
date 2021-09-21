@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,9 @@ import { baseurl } from '../../config';
 import { authActions } from '../store/auth-slice';
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const dispatch = useDispatch();
   const history = useHistory();
   const usernameRef = useRef();
@@ -18,6 +21,8 @@ const Login = () => {
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
     const sendData = async () => {
+      setIsLoading(true);
+      setError('');
       try {
         const res = await axios.post(`${baseurl}/auth/login`, {
           username,
@@ -28,14 +33,25 @@ const Login = () => {
         history.replace('/profile');
       } catch (err) {
         console.log(err.response);
+        setError(err.response.data);
+        setIsLoading(false);
       }
     };
     sendData();
   };
 
+  let alert;
+  if (isLoading) {
+    alert = <p className={classes.alert}>Loading...</p>;
+  }
+  if (error) {
+    alert = <p className={classes.error}>{error}</p>;
+  }
+
   return (
     <section className={classes.auth}>
       <h1> Login</h1>
+      {alert}
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor="emailorusername">Your Email or Username</label>
