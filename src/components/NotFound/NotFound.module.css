@@ -1,0 +1,21 @@
+.section {
+  display: grid;
+  height: 100vh;
+  place-items: center;
+  text-align: center;
+}
+
+.section a {
+  font: inherit;
+  color: white;
+  background-color: #484b4f;
+  border: 1px solid #484b4f;
+  border-radius: 4px;
+  padding: 0.5rem 2.5rem;
+  text-decoration: none;
+}
+
+.section a:hover {
+  background-color: #8d9197;
+  border-color: #8d9197;
+}
