@@ -28,12 +28,18 @@ const Login = () => {
           username,
           password,
         });
+        console.log(res.data);
 
         dispatch(authActions.login(res.data));
         history.replace('/profile');
+        setIsLoading(false);
       } catch (err) {
-        console.log(err.response);
-        setError(err.response.data);
+        console.log(err?.response);
+        if (err?.response?.data) {
+          setError(err.response.data);
+        } else {
+          setError('We encoutered a problem');
+        }
         setIsLoading(false);
       }
     };

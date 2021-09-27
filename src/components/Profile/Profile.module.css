@@ -30,3 +30,16 @@ input[type='submit'] {
   padding: 0.5rem 2rem;
   cursor: pointer;
 }
+
+.alert {
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  color: #0f5132;
+  background: #d1e7dd;
+}
+
+.alert.error {
+  color: #842029;
+  background: #f8d7da;
+}
