@@ -43,3 +43,8 @@ input[type='submit'] {
   color: #842029;
   background: #f8d7da;
 }
+
+.alert.error span {
+  text-decoration: underline;
+  cursor: pointer;
+}

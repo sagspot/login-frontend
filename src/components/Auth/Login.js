@@ -1,16 +1,15 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './Login.module.css';
 import { baseurl } from '../../config';
 import { authActions } from '../store/auth-slice';
 
-const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+axios.defaults.baseURL = baseurl;
 
+const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const usernameRef = useRef();
@@ -18,36 +17,42 @@ const Login = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const username = usernameRef.current.value;
+    let email;
+    let username;
+    if (usernameRef.current.value.includes('@')) {
+      email = usernameRef.current.value;
+    } else {
+      username = usernameRef.current.value;
+    }
     const password = passwordRef.current.value;
-    const sendData = async () => {
-      setIsLoading(true);
-      setError('');
-      try {
-        const res = await axios.post(`${baseurl}/auth/login`, {
-          username,
-          password,
-        });
-        console.log(res.data);
 
-        dispatch(authActions.login(res.data));
-        history.replace('/profile');
-        setIsLoading(false);
+    const sendRequest = async () => {
+      dispatch(authActions.loading());
+      try {
+        const response = await axios.request({
+          method: 'POST',
+          url: '/auth/login',
+          data: { username, email, password },
+        });
+        dispatch(authActions.login(response.data?.user));
+        localStorage.setItem('user', JSON.stringify(response.data?.user));
+        history.push('/profile');
       } catch (err) {
-        console.log(err?.response);
-        if (err?.response?.data) {
-          setError(err.response.data);
-        } else {
-          setError('We encoutered a problem');
-        }
-        setIsLoading(false);
+        console.log(err.response);
+        if (err.response.status === 404)
+          dispatch(authActions.error('Something went wrong'));
+        else dispatch(authActions.error(err.response?.data));
       }
     };
-    sendData();
+
+    sendRequest();
   };
 
+  const loading = useSelector((state) => state.auth.loading);
+  const error = useSelector((state) => state.auth.error);
+
   let alert;
-  if (isLoading) {
+  if (loading) {
     alert = <p className={classes.alert}>Loading...</p>;
   }
   if (error) {

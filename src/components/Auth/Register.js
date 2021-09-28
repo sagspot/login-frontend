@@ -1,22 +1,23 @@
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { baseurl } from '../../config';
 
 import classes from './Login.module.css';
 import { authActions } from '../store/auth-slice';
+import { useSelector } from 'react-redux';
+
+axios.defaults.baseURL = baseurl;
 
 const Register = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
   const dispatch = useDispatch();
   const history = useHistory();
   const nameRef = useRef();
   const usernameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
+  const passwordRptRef = useRef();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -24,35 +25,36 @@ const Register = () => {
     const username = usernameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    const sendData = async () => {
-      setIsLoading(true);
-      setError('');
-      try {
-        const res = await axios.post(`${baseurl}/auth/register`, {
-          name,
-          username,
-          email,
-          password,
-        });
+    const passwordRpt = passwordRptRef.current.value;
+    if (password !== passwordRpt)
+      return dispatch(authActions.error('Passwords do not match'));
 
-        console.log(res.data);
-        const user = {
-          userDetails: res.data.user,
-          token: res.data.token,
-        };
-        dispatch(authActions.login(user));
-        history.replace('/profile');
+    const sendRequest = async () => {
+      try {
+        const response = await axios.request({
+          method: 'POST',
+          url: '/auth/register',
+          data: { name, username, email, password },
+        });
+        dispatch(authActions.login(response.data?.user));
+        localStorage.setItem('user', JSON.stringify(response.data?.user));
+        history.push('/profile');
       } catch (err) {
-        setIsLoading(false);
-        setError(err.response.data);
         console.log(err.response);
+        if (err.response.status === 404)
+          dispatch(authActions.error('Something went wrong'));
+        else dispatch(authActions.error(err.response?.data));
       }
     };
-    sendData();
+
+    sendRequest();
   };
 
+  const loading = useSelector((state) => state.auth.loading);
+  const error = useSelector((state) => state.auth.error);
+
   let alert;
-  if (isLoading) {
+  if (loading) {
     alert = <p className={classes.alert}>Loading...</p>;
   }
   if (error) {
@@ -79,6 +81,15 @@ const Register = () => {
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
           <input type="password" id="password" required ref={passwordRef} />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor="passwordRpt">Confirm Password</label>
+          <input
+            type="passwordRpt"
+            id="passwordRpt"
+            required
+            ref={passwordRptRef}
+          />
         </div>
         <div className={classes.actions}>
           <button>Register</button>
