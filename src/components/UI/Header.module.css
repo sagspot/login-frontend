@@ -7,8 +7,20 @@
   padding: 0 10%;
 }
 
+@media only screen and (max-width: 600px) {
+  .header {
+    padding: 0 2%;
+  }
+}
+
 .header img.logo {
-  width: 200px;
+  width: 150px;
+}
+
+@media only screen and (max-width: 600px) {
+  .header img.logo {
+    width: 100px;
+  }
 }
 
 .header nav,
@@ -24,6 +36,12 @@
 
 .header li {
   margin: 0 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .header li {
+    margin: 0 0.5rem;
+  }
 }
 
 .header a {
@@ -46,6 +64,12 @@
   border: 1px solid #484b4f;
   border-radius: 4px;
   padding: 0.25rem 1.5rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .header button {
+    padding: 0.15rem 0.5rem;
+  }
 }
 
 .header button:hover {
