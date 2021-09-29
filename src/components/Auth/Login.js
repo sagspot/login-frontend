@@ -20,9 +20,9 @@ const Login = () => {
     let email;
     let username;
     if (usernameRef.current.value.includes('@')) {
-      email = usernameRef.current.value;
+      email = usernameRef.current.value.trim().toLowerCase();
     } else {
-      username = usernameRef.current.value;
+      username = usernameRef.current.value.trim().toLowerCase();
     }
     const password = passwordRef.current.value;
 
