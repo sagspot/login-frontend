@@ -85,7 +85,7 @@ const Register = () => {
         <div className={classes.control}>
           <label htmlFor="passwordRpt">Confirm Password</label>
           <input
-            type="passwordRpt"
+            type="password"
             id="passwordRpt"
             required
             ref={passwordRptRef}

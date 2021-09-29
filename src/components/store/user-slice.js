@@ -12,6 +12,12 @@ const userSlice = createSlice({
     confirmAccount(state) {
       state.loading = true;
     },
+    user(state, action) {
+      state.user = action.payload;
+    },
+    loading(state) {
+      state.loading = true;
+    },
     success(state, action) {
       state.loading = false;
       state.success = action.payload;

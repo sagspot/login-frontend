@@ -15,8 +15,11 @@ const Profile = () => {
     try {
       dispatch(userActions.confirmAccount());
       const response = await axios.request({
-        method: 'POST',
+        method: 'GET',
         url: `/auth/register/confirm/${user.id}`,
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       });
       console.log(response);
       dispatch(userActions.success(response?.data?.message));
