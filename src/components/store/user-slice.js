@@ -9,9 +9,6 @@ const userSlice = createSlice({
     error: null,
   },
   reducers: {
-    confirmAccount(state) {
-      state.loading = true;
-    },
     user(state, action) {
       state.user = action.payload;
     },

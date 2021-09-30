@@ -26,11 +26,6 @@ const Header = () => {
               Profile
             </NavLink>
           </li>
-          <li>
-            <NavLink activeClassName={classes.active} to="/update-profile">
-              Update profile
-            </NavLink>
-          </li>
         </ul>
         <button onClick={logoutHandler}>Logout</button>
       </nav>

@@ -34,12 +34,17 @@ const Login = () => {
           url: '/auth/login',
           data: { username, email, password },
         });
-        dispatch(authActions.login(response.data?.user));
+        dispatch(authActions.user(response.data?.user));
+        dispatch(authActions.login(response.data?.AuthToken));
         localStorage.setItem('user', JSON.stringify(response.data?.user));
+        localStorage.setItem(
+          'AuthToken',
+          JSON.stringify(response.data?.AuthToken)
+        );
         history.push('/profile');
       } catch (err) {
         console.log(err.response);
-        if (err.response.status === 404)
+        if (err.response?.status === 404)
           dispatch(authActions.error('Something went wrong'));
         else dispatch(authActions.error(err.response?.data));
       }

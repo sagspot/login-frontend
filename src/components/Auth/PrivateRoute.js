@@ -2,9 +2,9 @@ import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const user = useSelector((state) => state.auth.user);
+  const AuthToken = useSelector((state) => state.auth.AuthToken);
   const isAunthenticated = () => {
-    if (user) return true;
+    if (AuthToken) return true;
     return false;
   };
 
