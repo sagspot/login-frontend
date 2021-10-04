@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../store/user-slice';
 import DeleteUser from './DeleteUser';
+import { useEffect } from 'react';
+import { authActions } from '../store/auth-slice';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
@@ -33,6 +35,42 @@ const Profile = () => {
       else dispatch(userActions.error('Something went wrong'));
     }
   };
+
+  useEffect(() => {
+    const userProfile = async () => {
+      try {
+        const response = await axios.request({
+          method: 'GET',
+          url: `/${user.id}`,
+          headers: {
+            Authorization: `Bearer ${AuthToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const {
+          _id: id,
+          name,
+          username,
+          email,
+          role,
+          isConfirmed,
+        } = response?.data?.user;
+        const userData = { id, name, username, email, role, isConfirmed };
+        dispatch(authActions.user(userData));
+        localStorage.setItem('user', JSON.stringify(userData));
+      } catch (err) {
+        console.log(err.response);
+        if (err?.response?.data?.message) {
+          dispatch(authActions.error(err.response.data.message));
+        } else if (err?.response?.data) {
+          dispatch(authActions.error(err.response?.data));
+        } else dispatch(authActions.error('Something went wrong'));
+      }
+    };
+
+    userProfile();
+  }, []);
 
   let alert = false;
   const loading = useSelector((state) => state.user.loading);

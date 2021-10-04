@@ -59,6 +59,11 @@ const ResetPassword = () => {
 
   return (
     <section className={classes.auth}>
+      <div className={classes.actions} style={{ margin: '0' }}>
+        <Link to="/" className={classes.toggle} style={{ margin: '0' }}>
+          Back to Home
+        </Link>
+      </div>
       <h1> Reset Password</h1>
       {alert}
       <form onSubmit={submitHandler}>

@@ -8,7 +8,7 @@ const Home = () => {
         <h3>Welcome to Sagpot Login System</h3>
         <p>Click the button below to visit your dashboard and explore</p>
         <p>
-          If you do not have an account, feel free to create one so as to
+          If you do not have an account, feel free to create one so you can
           explore the system's capabilities
         </p>
         <Link to="/profile">Dashboard</Link>

@@ -24,7 +24,7 @@
 }
 
 .header nav,
-.header ul {
+.header a {
   height: 100%;
   list-style: none;
   display: flex;
@@ -34,19 +34,16 @@
   justify-content: center;
 }
 
-.header li {
+.header a {
   margin: 0 1rem;
+  color: #6c757d;
+  text-decoration: none;
 }
 
 @media only screen and (max-width: 600px) {
-  .header li {
+  .header a {
     margin: 0 0.5rem;
   }
-}
-
-.header a {
-  color: #6c757d;
-  text-decoration: none;
 }
 
 .header a:hover,

@@ -11,6 +11,7 @@ const Header = () => {
   const logoutHandler = () => {
     dispatch(authActions.logout());
     localStorage.removeItem('user');
+    localStorage.removeItem('AuthToken');
   };
 
   return (
@@ -20,13 +21,12 @@ const Header = () => {
       </div>
 
       <nav>
-        <ul>
-          <li>
-            <NavLink activeClassName={classes.active} to="/profile">
-              Profile
-            </NavLink>
-          </li>
-        </ul>
+        <NavLink activeClassName={classes.active} to="/">
+          Home
+        </NavLink>
+        <NavLink activeClassName={classes.active} to="/profile">
+          Profile
+        </NavLink>
         <button onClick={logoutHandler}>Logout</button>
       </nav>
     </header>

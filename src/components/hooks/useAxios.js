@@ -1,37 +1,37 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { baseurl } from '../../config';
 import { authActions } from '../store/auth-slice';
 
 axios.defaults.baseURL = baseurl;
 
-const useAxios = () => {
-  const [loading, setLoading] = useState(false);
-  const [resData, setResData] = useState(null);
-  const [error, setError] = useState(null);
+const useAxios = (params) => {
+  const AuthToken = useSelector((state) => state.auth.AuthToken);
+  const dispatch = useDispatch();
 
-  const sendRequest = async (params) => {
-    setLoading(true);
-    setError(null);
+  const sendRequest = async () => {
+    dispatch(authActions.loading());
+    let success;
     try {
-      const res = await axios.request(params);
-      const data = await res?.data;
-
-      setResData(data);
+      const response = await axios.request({
+        method: params.method,
+        url: params.url,
+        headers: {
+          Authorization: AuthToken ? `Bearer ${AuthToken}` : null,
+          'Content-Type': 'application/json',
+        },
+        data: params.data ? params.data : null,
+      });
+      success = true;
+      return { success, response };
     } catch (err) {
+      success = false;
       const error = err?.response;
-      setError(error);
-    } finally {
-      setLoading(false);
+      return { success, error };
     }
   };
 
-  return { sendRequest, loading, resData, error };
+  sendRequest();
 };
 
 export default useAxios;
-
-// dispatch(authActions.login(res.data));
-// history.replace('/profile');
-// setLoading(false);

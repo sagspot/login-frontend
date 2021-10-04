@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,13 +35,12 @@ const Login = () => {
           data: { username, email, password },
         });
         dispatch(authActions.user(response.data?.user));
-        dispatch(authActions.login(response.data?.AuthToken));
         localStorage.setItem('user', JSON.stringify(response.data?.user));
+        dispatch(authActions.login(response.data?.AuthToken));
         localStorage.setItem(
           'AuthToken',
           JSON.stringify(response.data?.AuthToken)
         );
-        history.push('/profile');
       } catch (err) {
         console.log(err.response);
         if (err.response?.status === 404)
@@ -52,6 +51,13 @@ const Login = () => {
 
     sendRequest();
   };
+
+  const AuthToken = useSelector((state) => state.auth.AuthToken);
+  useEffect(() => {
+    if (AuthToken) {
+      history.push('/profile');
+    }
+  }, [history, AuthToken]);
 
   const loading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.auth.error);
@@ -66,6 +72,11 @@ const Login = () => {
 
   return (
     <section className={classes.auth}>
+      <div className={classes.actions} style={{ margin: '0' }}>
+        <Link to="/" className={classes.toggle} style={{ margin: '0' }}>
+          Back to Home
+        </Link>
+      </div>
       <h1> Login</h1>
       {alert}
       <form onSubmit={submitHandler}>

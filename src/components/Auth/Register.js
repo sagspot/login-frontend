@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { baseurl } from '../../config';
@@ -43,8 +43,6 @@ const Register = () => {
           'AuthToken',
           JSON.stringify(response.data?.AuthToken)
         );
-
-        history.push('/profile');
       } catch (err) {
         console.log(err.response);
         if (err.response.status === 404)
@@ -55,6 +53,13 @@ const Register = () => {
 
     sendRequest();
   };
+
+  const AuthToken = useSelector((state) => state.auth.AuthToken);
+  useEffect(() => {
+    if (AuthToken) {
+      history.push('/profile');
+    }
+  }, [history, AuthToken]);
 
   const loading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.auth.error);
@@ -69,6 +74,11 @@ const Register = () => {
 
   return (
     <section className={classes.auth}>
+      <div className={classes.actions} style={{ margin: '0' }}>
+        <Link to="/" className={classes.toggle} style={{ margin: '0' }}>
+          Back to Home
+        </Link>
+      </div>
       <h1> Register</h1>
       {alert}
       <form onSubmit={submitHandler}>
